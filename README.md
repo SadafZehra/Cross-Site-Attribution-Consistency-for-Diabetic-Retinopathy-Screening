@@ -1,9 +1,6 @@
 # Do Explanations Survive the Camera?
 ### Cross-site attribution consistency in diabetic retinopathy screening
 
-**Author:** Sadaf Zehra · pilot study
-**Notebook:** `fundus_cross_site_xai_KAGGLE.ipynb` (runs on Kaggle Notebooks, free GPU)
-
 ---
 
 ## 1. Motivation
@@ -95,27 +92,3 @@ Everything is written to `/kaggle/working/fundus_xai/outputs/`:
 5. Lesion grounding examples
 6. Deletion curves
 
-## 7. How to read the results
-
-- **Accuracy.** A drop on external sites is expected. The interesting case is when AUC stays similar but the explanation changes.
-- **Energy outside the retina.** Values clearly above ~0.02 suggest the model uses the image border, camera text or black background. In DEMO mode the source site has a planted white marker, so this should be high for at least one model.
-- **Site-swap stability.** Spearman close to 1 means the explanation survives the camera change. A low value together with a small AUC change is the key finding: *accuracy holds but evidence moves*.
-- **Lesion grounding.** `lift` > 1 means more attribution on lesions than their area predicts. `pointing_game` is the share of images where the hottest pixel falls on (or near) a lesion.
-- **Deletion test.** If blurring top-attributed patches does not hurt more than blurring random ones, the explanation is not faithful.
-
-## 8. Limitations
-
-- Site-swap uses colour/contrast matching only. Real cameras also differ in resolution, blur, field of view and compression.
-- DR grading conventions differ between datasets, so external AUC mixes device shift with label shift.
-- One training seed. For a paper, repeat with 3 seeds and report mean ± std.
-- Grad-CAM and the evidence map differ in what their values mean; compare trends, not absolute values.
-
-## 9. Next steps
-
-1. Add a third explanation method (e.g. Integrated Gradients) and a ViT backbone.
-2. Add resolution / blur / JPEG differences to the site-swap test.
-3. Train with a consistency loss that keeps explanations stable across simulated sites, and test whether it improves external AUC.
-
-## 10. Requirements
-
-Python 3, PyTorch + torchvision, NumPy, pandas, SciPy, scikit-learn, Pillow, matplotlib, tqdm, `kagglehub`. All are pre-installed on Kaggle.
